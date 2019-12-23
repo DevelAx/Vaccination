@@ -1,36 +1,37 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Vaccination.App.CQRS.Patients.Queries.GetPatients;
 using Vaccination.Models;
+using WebUI.Controllers.Base;
 
 namespace Vaccination.Controllers
 {
-	public class HomeController : Controller
+	public class HomeController : BaseController<HomeController>
 	{
-		private readonly ILogger<HomeController> _logger;
-
-		public HomeController(ILogger<HomeController> logger)
+		public HomeController(IServiceProvider services) 
+			: base(services)
 		{
-			_logger = logger;
 		}
 
-		public IActionResult Index()
+		public async Task<IActionResult> Index()
 		{
 			return View();
 		}
 
 		public IActionResult Privacy()
 		{
+			_log.LogDebug(MethodBase.GetCurrentMethod().Name);
 			return View();
 		}
 
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 		public IActionResult Error()
 		{
+			_log.LogDebug(MethodBase.GetCurrentMethod().Name);
 			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 		}
 	}

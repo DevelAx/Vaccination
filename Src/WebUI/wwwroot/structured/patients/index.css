@@ -1,0 +1,7 @@
+﻿.table tr td, .table tr th {
+  white-space: nowrap; }
+
+.table tbody tr:hover {
+  cursor: pointer;
+  color: Highlight;
+  background-color: #e9ecef; }
