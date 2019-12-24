@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Vaccination.EF.Migrations
 {
-    public partial class InitCreate : Migration
+    public partial class CreateInit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -20,6 +20,9 @@ namespace Vaccination.EF.Migrations
                     FirstName = table.Column<string>(nullable: false),
                     LastName = table.Column<string>(nullable: false),
                     Patronymic = table.Column<string>(nullable: true),
+                    NormalizedFirstName = table.Column<string>(nullable: false),
+                    NormalizedLastName = table.Column<string>(nullable: false),
+                    NormalizedPatronymic = table.Column<string>(nullable: true),
                     NormalizedFullName = table.Column<string>(nullable: false),
                     BirthDate = table.Column<DateTime>(nullable: false),
                     Sex = table.Column<string>(nullable: false),
@@ -90,6 +93,12 @@ namespace Vaccination.EF.Migrations
                 name: "IX_Inoculations_VaccineId",
                 table: "Inoculations",
                 column: "VaccineId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Patients_InsuranceNumber",
+                table: "Patients",
+                column: "InsuranceNumber",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Patients_IntId",

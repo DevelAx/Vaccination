@@ -13,6 +13,9 @@ namespace Vaccination.Domain.Entities
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
 		public string Patronymic { get; set; }
+		public string NormalizedFirstName { get; set; }
+		public string NormalizedLastName { get; set; }
+		public string NormalizedPatronymic { get; set; }
 		public string NormalizedFullName { get; set; }
 		public DateTime BirthDate { get; set; }
 		public string Sex { get; set; }

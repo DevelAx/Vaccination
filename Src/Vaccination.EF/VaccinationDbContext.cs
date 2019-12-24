@@ -56,11 +56,22 @@ namespace Vaccination.EF
 
 				if (entry.Entity is Patient patient)
 				{
-					patient.NormalizedFullName = string.Join(" ", patient.LastName, patient.FirstName, patient.Patronymic).TrimEnd().ToUpper().Replace('Ё', 'E');
+					patient.NormalizedLastName = Normalize(patient.LastName);
+					patient.NormalizedFirstName = Normalize(patient.FirstName);
+					patient.NormalizedPatronymic = Normalize(patient.Patronymic);
+
+					patient.NormalizedFullName = string
+						.Join(" ", patient.NormalizedLastName, patient.NormalizedFirstName, patient.NormalizedPatronymic)
+						.TrimEnd();
 				}
 			}
 
 			return base.SaveChangesAsync(cancellationToken);
+		}
+
+		private string Normalize(string str)
+		{
+			return str?.ToUpper().Replace('Ё', 'Е');
 		}
 
 		public async Task MigrateAsync()

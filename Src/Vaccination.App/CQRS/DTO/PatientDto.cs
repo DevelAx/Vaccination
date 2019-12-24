@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.ComponentModel;
 using Vaccination.App.Mapping;
 using Vaccination.Domain.Entities;
@@ -19,7 +20,7 @@ namespace Vaccination.App.CQRS.DTO
 		public string Patronymic { get; set; }
 
 		[DisplayName("Дата рождения")]
-		public DateTime BirthDate { get; set; }
+		public string BirthDate { get; set; }
 
 		[DisplayName("Пол")]
 		public string Sex { get; set; }
@@ -37,5 +38,18 @@ namespace Vaccination.App.CQRS.DTO
 		}
 
 		private string _fullName;
+
+		public virtual void Mapping(Profile profile)
+		{
+			profile.CreateMap<Patient, PatientDto>()
+				.ForMember(p => p.BirthDate, opt => opt.MapFrom(s => s.BirthDate.ToShortDateString()));
+		}
+
+		[DisplayName("Кол-во прививок")]
+		public virtual int InoculationsCount { get; set; }
+
+		public string NormalizedFirstName { get; set; }
+		public string NormalizedLastName { get; set; }
+		public string NormalizedPatronymic { get; set; }
 	}
 }

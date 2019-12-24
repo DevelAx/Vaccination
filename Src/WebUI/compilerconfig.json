@@ -2,5 +2,13 @@
   {
     "outputFile": "wwwroot/structured/patients/index.css",
     "inputFile": "wwwroot/structured/patients/index.scss"
+  },
+  {
+    "outputFile": "wwwroot/structured/patients/index.es5.js",
+    "inputFile": "wwwroot/structured/patients/index.js"
+  },
+  {
+    "outputFile": "wwwroot/lib/miranda/jquery.miranda.es5.js",
+    "inputFile": "wwwroot/lib/miranda/jquery.miranda.js"
   }
 ]

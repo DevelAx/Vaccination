@@ -93,8 +93,19 @@ namespace Vaccination.EF.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("NormalizedFirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("NormalizedFullName")
                         .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("NormalizedLastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("NormalizedPatronymic")
                         .HasColumnType("text");
 
                     b.Property<string>("Patronymic")
@@ -105,6 +116,9 @@ namespace Vaccination.EF.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("InsuranceNumber")
+                        .IsUnique();
 
                     b.HasIndex("IntId")
                         .IsUnique();

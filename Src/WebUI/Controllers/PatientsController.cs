@@ -4,15 +4,15 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using Vaccination.App.CQRS.Patients.Queries.FindPatients;
 using Vaccination.App.CQRS.Patients.Queries.GetPatient;
-using Vaccination.App.CQRS.Patients.Queries.GetPatients;
 using Vaccination.Infastructure.Config.Sections;
 using WebUI.Controllers.Base;
 using WebUI.Inner.Constants.Routing;
 
 namespace WebUI.Controllers
 {
-    [Route(PatientsRoutes.Controller)]
+    [Route(PatientsRoutes.controller)]
     public class PatientsController : BaseController<PatientsController>
     {
         public PatientsController(IServiceProvider services) 
@@ -20,16 +20,20 @@ namespace WebUI.Controllers
         {
         }
 
-        [HttpGet("{page:int?}")]
-        public async Task<IActionResult> Index([FromServices]IOptions<AppSettings> settings, int page = 1)
+        public IActionResult Index()
         {
             _log.LogDebug(MethodBase.GetCurrentMethod().Name);
-            int itemsPerPage = settings.Value.ItemsPerPage;
-            var vm = await Mediator.Send(new GetPaitientsQuery(page - 1, itemsPerPage));
-            return View(vm);
+            return View();
         }
 
-        [HttpGet(PatientsRoutes.Patient + "/{id:int}")]
+        [HttpGet(PatientsRoutes.search)]
+        public async Task<IActionResult> PatientsList([FromServices]IOptions<AppSettings> settings, string fullName, string insuranceNumber, int searchId, int page = 1)
+        {
+            var vm = await Mediator.Send(new FindPatientsQuery(fullName, insuranceNumber, searchId, page));
+            return Json(vm);
+        }
+
+        [HttpGet(PatientsRoutes.patient + "/{id:int}")]
         public async Task<IActionResult> Patient(int id)
         {
             _log.LogDebug(MethodBase.GetCurrentMethod().Name);

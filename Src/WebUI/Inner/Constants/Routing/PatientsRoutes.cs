@@ -2,7 +2,8 @@
 {
 	public static class PatientsRoutes
 	{
-		public const string Controller = "пациенты";
-		public const string Patient = "пациент";
+		public const string controller = "пациенты";
+		public const string patient = "пациент";
+		public const string search = "поиск";
 	}
 }
