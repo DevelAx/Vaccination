@@ -54,12 +54,12 @@
             replaceAttrValue = container.attr("data-valmsg-replace"),
             replace = replaceAttrValue ? $.parseJSON(replaceAttrValue) !== false : null;
 
-        container.removeClass("field-validation-valid").addClass("field-validation-error");
+        container.removeClass("field-validation-valid").addClass("invalid-feedback");
         error.data("unobtrusiveContainer", container);
 
         if (replace) {
             container.empty();
-            error.removeClass("input-validation-error").appendTo(container);
+            error.removeClass("is-invalid").appendTo(container);
         }
         else {
             error.hide();
@@ -87,7 +87,7 @@
             var replaceAttrValue = container.attr("data-valmsg-replace"),
                 replace = replaceAttrValue ? $.parseJSON(replaceAttrValue) : null;
 
-            container.addClass("field-validation-valid").removeClass("field-validation-error");
+            container.addClass("field-validation-valid").removeClass("invalid-feedback");
             error.removeData("unobtrusiveContainer");
 
             if (replace) {
@@ -113,9 +113,9 @@
         $form.find(".validation-summary-errors")
             .addClass("validation-summary-valid")
             .removeClass("validation-summary-errors");
-        $form.find(".field-validation-error")
+        $form.find(".invalid-feedback")
             .addClass("field-validation-valid")
-            .removeClass("field-validation-error")
+            .removeClass("invalid-feedback")
             .removeData("unobtrusiveContainer")
             .find(">*")  // If we were using valmsg-replace, get the underlying error
             .removeData("unobtrusiveContainer");
@@ -134,7 +134,7 @@
         if (!result) {
             result = {
                 options: {  // options structure passed to jQuery Validate's validate() method
-                    errorClass: defaultOptions.errorClass || "input-validation-error",
+                    errorClass: defaultOptions.errorClass || "is-invalid",
                     errorElement: defaultOptions.errorElement || "span",
                     errorPlacement: function () {
                         onError.apply(form, arguments);

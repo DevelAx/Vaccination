@@ -13,13 +13,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{33F9DDE1-5
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{2B73356B-BC89-41C7-8F1B-DABFFAB564F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vaccination.Domain", "Src\Vaccination.Domain\Vaccination.Domain.csproj", "{F5C85AD1-4338-445F-9FB1-D4E37D85A312}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vaccination.Domain", "Src\Vaccination.Domain\Vaccination.Domain.csproj", "{F5C85AD1-4338-445F-9FB1-D4E37D85A312}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vaccination.EF", "Src\Vaccination.EF\Vaccination.EF.csproj", "{783DFAFF-13B0-4EEA-974C-C1C08746CB02}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vaccination.EF", "Src\Vaccination.EF\Vaccination.EF.csproj", "{783DFAFF-13B0-4EEA-974C-C1C08746CB02}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vaccination.Common", "Src\Vaccination.Common\Vaccination.Common.csproj", "{274E71E6-5B98-4392-96ED-3BDEBBBC0B6F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vaccination.Common", "Src\Vaccination.Common\Vaccination.Common.csproj", "{274E71E6-5B98-4392-96ED-3BDEBBBC0B6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vaccination.Infastructure", "Src\Vaccination.Infastructure\Vaccination.Infastructure.csproj", "{9D14C474-5729-482C-9A1D-29DA58AB6486}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vaccination.Infastructure", "Src\Vaccination.Infastructure\Vaccination.Infastructure.csproj", "{9D14C474-5729-482C-9A1D-29DA58AB6486}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vaccination.Interfaces", "Src\Vaccination.Interfaces\Vaccination.Interfaces.csproj", "{D213E0D7-4553-4FF8-B1E8-81A2651C68C8}"
 EndProject

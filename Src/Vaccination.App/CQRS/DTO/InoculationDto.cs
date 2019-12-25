@@ -4,7 +4,7 @@ using Vaccination.Domain.Entities;
 
 namespace Vaccination.App.CQRS.DTO
 {
-	public class InoculationDto : IMapFrom<Inoculation>
+	public class InoculationDto : BaseMapFrom<Inoculation>
 	{
 		public Vaccine Vaccine { get; set; }
 		public bool HasConsent { get; set; }

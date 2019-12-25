@@ -7,6 +7,8 @@ namespace Vaccination.App.CQRS.Exceptions
 {
 	public class PatientNotFoundException : VaccinationAppException
 	{
-		public PatientNotFoundException(string message) : base(message) { }
+		public PatientNotFoundException(string message = "Пациент не найден") 
+			: base(message) 
+		{ }
 	}
 }

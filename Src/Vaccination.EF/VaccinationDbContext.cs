@@ -1,9 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Vaccination.Domain.Entities;
+using Vaccination.Domain.Entities.Proto;
 using Vaccination.Interfaces;
 
 namespace Vaccination.EF
@@ -77,6 +80,20 @@ namespace Vaccination.EF
 		public async Task MigrateAsync()
 		{
 			await Database.MigrateAsync();
+		}
+
+		public Task UpdateAsync<TEntity>(Expression<Func<TEntity, TEntity>> update, Expression<Func<TEntity, bool>> filter) 
+			where TEntity : BaseGenerics<Guid>.Entity
+		{
+			if (filter == null)
+				throw new NullReferenceException("Filter cannot be empty, otherwise all the records will be updated.");
+
+			IQueryable<TEntity> query = Set<TEntity>();
+
+			if (filter != null)
+				query = query.Where(filter);
+
+			return query.UpdateFromQueryAsync(update);
 		}
 	}
 }

@@ -52,7 +52,7 @@
             $.get(getPatientsUrl, urlParams).done(function (data) {
                 if (data.searchId !== searchId - 1) return;
 
-                stopSearchProgress(data.patients.length);
+                stopSearchProgress(data.totalPatientsCount, data.patients.length);
                 page = data.pageNumber + 1;
                 $patientsListContainer.mirandajs(data.patients);
                 $paginationContainer.mirandajs(data.pages.length < 2 ? [] : data.pages);
@@ -74,11 +74,11 @@
             }, 250);
         }
 
-        function stopSearchProgress(foundCount) {
+        function stopSearchProgress(foundCount, shownCount) {
             $searchProgress.css("color", "black");
             clearInterval(intervalId);
             $searchProgress.text("");
-            $searchState.text("Найдено: " + foundCount);
+            $searchState.text("Найдено " + foundCount + ", показано на странице " + shownCount);
         }
 
         function updatePageInfo(data) {

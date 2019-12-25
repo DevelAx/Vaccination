@@ -6,7 +6,7 @@ using Vaccination.Domain.Entities;
 
 namespace Vaccination.App.CQRS.DTO
 {
-	public class PatientDto : IMapFrom<Patient>
+	public class PatientDto : BaseMapFrom<Patient>
 	{
 		public int IntId { get; set; }
 

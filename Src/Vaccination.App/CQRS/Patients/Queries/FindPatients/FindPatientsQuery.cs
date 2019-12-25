@@ -138,6 +138,7 @@ namespace Vaccination.App.CQRS.Patients.Queries.FindPatients
 
 			var vm = new PatientsListVM
 			{
+				TotalPatientsCount = patientsCount,
 				Patients = patients,
 				SearchId = request.SearchId,
 				PageNumber = request.Page,

@@ -1,3 +1,5 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -6,6 +8,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Globalization;
 using Vaccination.App;
+using Vaccination.App.CQRS.Patients.Commands.UpdatePatient;
+using Vaccination.App.CQRS.Patients.Queries.GetEditPaitient;
 using Vaccination.EF;
 using Vaccination.Infastructure;
 using WebUI.Inner.Filters;
@@ -36,6 +40,9 @@ namespace Vaccination
 			{
 				opt.Filters.Add(typeof(RemoveStringsSpacesRedundancyFilter));
 			});
+
+			mvcBuilder.AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<UpdatePatientValidator>());
+			//services.AddTransient<IValidator<EditPatientVM>, UpdatePatientValidator>();
 
 			if (_hostEnvironment.IsDevelopment())
 			{

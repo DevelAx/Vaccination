@@ -15,8 +15,7 @@ namespace Vaccination.App.Mapping
 		private void ApplyMappingsFromAssembly(Assembly assembly)
 		{
 			var types = assembly.GetExportedTypes()
-				.Where(t => t.GetInterfaces()
-				.Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IMapFrom<>)))
+				.Where(t => !t.IsAbstract && IsSubclassOfRawGeneric(typeof(BaseMapFrom<>), t))
 				.ToList();
 
 			foreach (var type in types)
@@ -35,8 +34,22 @@ namespace Vaccination.App.Mapping
 			if (methodInfo != null)
 				return methodInfo;
 
-			Type iType = type.GetInterfaces().Single(i => i.GetGenericTypeDefinition() == typeof(IMapFrom<>));
+			Type iType = type.GetInterfaces().Single(i => i.GetGenericTypeDefinition() == typeof(BaseMapFrom<>));
 			return iType.GetMethod(methodName, flags);
+		}
+
+		static bool IsSubclassOfRawGeneric(Type generic, Type toCheck)
+		{
+			while (toCheck != null && toCheck != typeof(object))
+			{
+				var cur = toCheck.IsGenericType ? toCheck.GetGenericTypeDefinition() : toCheck;
+				if (generic == cur)
+				{
+					return true;
+				}
+				toCheck = toCheck.BaseType;
+			}
+			return false;
 		}
 	}
 }

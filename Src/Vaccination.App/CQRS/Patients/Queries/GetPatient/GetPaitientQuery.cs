@@ -31,15 +31,15 @@ namespace Vaccination.App.CQRS.Patients.Queries.GetPatient
 
 		public override async Task<PatientVM> Handle(GetPaitientQuery request, CancellationToken cancellationToken)
 		{
-			var patientVM = await _dbContext.Patients
+			var vm = await _dbContext.Patients
 				.ProjectTo<PatientVM>(_mapper.ConfigurationProvider)
-				.FirstOrDefaultAsync(p => p.IntId == request.PatientId);
+				.FirstOrDefaultAsync(p => p.IntId == request.PatientId, cancellationToken);
 
-			if (patientVM == null)
-				throw new PatientNotFoundException("Пациент не найден.");
+			if (vm == null)
+				throw new PatientNotFoundException();
 
-			patientVM.Inoculations = patientVM.Inoculations.OrderBy(i => i.Date).ToList();
-			return patientVM;
+			vm.Inoculations = vm.Inoculations.OrderBy(i => i.Date).ToList();
+			return vm;
 		}
 	}
 }

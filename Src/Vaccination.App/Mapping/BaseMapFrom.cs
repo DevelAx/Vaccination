@@ -2,9 +2,9 @@
 
 namespace Vaccination.App.Mapping
 {
-	public interface IMapFrom<TSource>
+	public abstract class BaseMapFrom<TSource>
 	{
-		void Mapping(Profile profile)
+		public virtual void Mapping(Profile profile)
 		{
 			profile.CreateMap(typeof(TSource), GetType());
 		}

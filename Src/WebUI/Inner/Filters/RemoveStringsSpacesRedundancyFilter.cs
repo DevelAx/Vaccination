@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using WebUI.Inner.Attributes;
 
 namespace WebUI.Inner.Filters
@@ -54,13 +52,12 @@ namespace WebUI.Inner.Filters
 
                     if (currentValue != null && currentValue.Length > 0)
                     {
-                        if (property.GetCustomAttribute<PreserveStringSpacesAttribute>() == null)
+                        if (property.GetCustomAttribute<PreserveInnerStringSpacesAttribute>() == null)
                         {
                             currentValue = TrimPropertyValue(currentValue, toLowerCase);
                         }
                         else if (char.IsWhiteSpace(currentValue[0]) || char.IsWhiteSpace(currentValue[currentValue.Length - 1]))
                         {
-                            // Don't trim HTML from within.
                             currentValue = currentValue.Trim();
                         }
 
