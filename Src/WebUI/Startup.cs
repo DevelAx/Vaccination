@@ -1,19 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
+using System.Globalization;
 using Vaccination.App;
 using Vaccination.EF;
 using Vaccination.Infastructure;
+using WebUI.Inner.Filters;
 
 namespace Vaccination
 {
@@ -21,7 +16,7 @@ namespace Vaccination
 	{
 		private readonly IHostEnvironment _hostEnvironment;
 
-		public IConfiguration Configuration { get; }	
+		public IConfiguration Configuration { get; }
 
 		public Startup(IConfiguration configuration, IHostEnvironment hostEnvironment)
 		{
@@ -37,9 +32,9 @@ namespace Vaccination
 				.AddEntityFramework(Configuration)
 				.AddApp();
 
-			var mvcBuilder = services.AddControllersWithViews(opt=>
+			var mvcBuilder = services.AddControllersWithViews(opt =>
 			{
-				
+				opt.Filters.Add(typeof(RemoveStringsSpacesRedundancyFilter));
 			});
 
 			if (_hostEnvironment.IsDevelopment())
