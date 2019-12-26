@@ -34,11 +34,13 @@ namespace Vaccination.App.CQRS.Patients.Commands.UpdatePatient
 			foreach(var inoculation in vm.Inoculations.Where(i => i.IsDeleted).ToList())
 			{
 				vm.Inoculations.Remove(inoculation);
-				_dbContext.Inoculations.Remove(new Inoculation { Id = inoculation.Id });
+
+				if (Guid.Empty != inoculation.Id) // When an inoculation was created and then deleted in one edit session.
+					_dbContext.Inoculations.Remove(new Inoculation { Id = inoculation.Id });
 			}
 
 			Patient patient = new Patient { Id = vm.Id };
-			_dbContext.Patients.Attach(patient);
+			_dbContext.Patients.Attach(patient).Property(m=>m.Patronymic).IsModified = true;
 			_mapper.Map(request.Patient, patient);
 			await _dbContext.SaveChangesAsync(cancellationToken);
 

@@ -34,5 +34,23 @@ namespace Vaccination.App
 				return true;
 			}
 		}
+
+		public static IRuleBuilderOptions<T, DateTime?> DatesRange<T>
+			(this IRuleBuilder<T, DateTime?> builder, DateTime minDate, DateTime maxDate, string message = "Дата должна быть в диапазоне от {0} до {1}")
+		{
+			message = string.Format(message, minDate.ToShortDateString(), maxDate.ToShortDateString());
+			return builder.Must(BeActualDate).WithMessage(message);
+
+			bool BeActualDate(DateTime? date)
+			{
+				if (date.Equals(default))
+					return false;
+
+				if (date < minDate || date > maxDate)
+					return false;
+
+				return true;
+			}
+		}
 	}
 }

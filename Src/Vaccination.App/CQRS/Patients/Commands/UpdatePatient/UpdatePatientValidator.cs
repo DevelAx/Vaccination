@@ -24,7 +24,7 @@ namespace Vaccination.App.CQRS.Patients.Commands.UpdatePatient
 		{
 			public UpdateInoculationValidator(EditPatientVM parent)
 			{
-				When(i => !i.IsDeleted, () =>
+				When(i=>!i.IsDeleted, () =>
 				{
 					RuleFor(x => x.VaccineId).Required();
 					RuleFor(x => x.Date).DatesRange(parent.BirthDate, DateTime.Now);

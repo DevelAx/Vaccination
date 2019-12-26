@@ -8,18 +8,21 @@ namespace Vaccination.App.CQRS.Patients.Queries.GetEditPaitient
 {
 	public class EditInoculationDto : BaseMapFrom<Inoculation>
 	{
-		public Guid Id { get; set; }
-
 		[DisplayName("Вакцина")]
 		public Guid VaccineId { get; set; }
 
 		[DisplayName("Дата постановки")]
-		public DateTime Date { get; set; }
+		public DateTime? Date { get; set; }
 
 		[DisplayName("Наличие согласия пациента")]
 		public bool HasConsent { get; set; }
 
 		public bool IsDeleted { get; set; }
+
+		public bool IsActual()
+		{
+			return !IsDeleted && Id != Guid.Empty;
+		}
 
 		public override void Mapping(Profile profile)
 		{
