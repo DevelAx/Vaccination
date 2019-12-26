@@ -45,7 +45,7 @@ namespace Vaccination.App.CQRS.DbSeeding.Commands.SeedSampleData
 		private void SeedPatients(CancellationToken cancellationToken)
 		{
 			Random rnd = new Random(Environment.TickCount);
-			RandomDate randomDate = new RandomDate(1950, DateTime.Now.Year - 1);
+			RandomDate randomDate = new RandomDate(1950, DateTime.Now.Year - 10);
 			int n = 0;
 
 			var patients = new Patient[]

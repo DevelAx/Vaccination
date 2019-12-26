@@ -1,10 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Vaccination.EF.Migrations
 {
-    public partial class CreateInit : Migration
+    public partial class InitDB : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,8 +12,6 @@ namespace Vaccination.EF.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    IntId = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Created = table.Column<DateTime>(nullable: false),
                     LastModified = table.Column<DateTime>(nullable: true),
                     FirstName = table.Column<string>(nullable: false),
@@ -25,7 +22,7 @@ namespace Vaccination.EF.Migrations
                     NormalizedPatronymic = table.Column<string>(nullable: true),
                     NormalizedFullName = table.Column<string>(nullable: false),
                     BirthDate = table.Column<DateTime>(nullable: false),
-                    Sex = table.Column<string>(nullable: false),
+                    Sex = table.Column<string>(maxLength: 1, nullable: false),
                     InsuranceNumber = table.Column<string>(maxLength: 11, nullable: false)
                 },
                 constraints: table =>
@@ -38,8 +35,6 @@ namespace Vaccination.EF.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    IntId = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
@@ -52,8 +47,6 @@ namespace Vaccination.EF.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    IntId = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Created = table.Column<DateTime>(nullable: false),
                     LastModified = table.Column<DateTime>(nullable: true),
                     PatientId = table.Column<Guid>(nullable: false),
@@ -79,12 +72,6 @@ namespace Vaccination.EF.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Inoculations_IntId",
-                table: "Inoculations",
-                column: "IntId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Inoculations_PatientId",
                 table: "Inoculations",
                 column: "PatientId");
@@ -98,18 +85,6 @@ namespace Vaccination.EF.Migrations
                 name: "IX_Patients_InsuranceNumber",
                 table: "Patients",
                 column: "InsuranceNumber",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Patients_IntId",
-                table: "Patients",
-                column: "IntId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Vaccines_IntId",
-                table: "Vaccines",
-                column: "IntId",
                 unique: true);
         }
 

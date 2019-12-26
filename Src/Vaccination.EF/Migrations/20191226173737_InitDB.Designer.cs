@@ -10,8 +10,8 @@ using Vaccination.EF;
 namespace Vaccination.EF.Migrations
 {
     [DbContext(typeof(VaccinationDbContext))]
-    [Migration("20191224162746_CreateInit")]
-    partial class CreateInit
+    [Migration("20191226173737_InitDB")]
+    partial class InitDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -36,11 +36,6 @@ namespace Vaccination.EF.Migrations
                     b.Property<bool>("HasConsent")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("IntId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp without time zone");
 
@@ -51,9 +46,6 @@ namespace Vaccination.EF.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("IntId")
-                        .IsUnique();
 
                     b.HasIndex("PatientId");
 
@@ -83,11 +75,6 @@ namespace Vaccination.EF.Migrations
                         .HasColumnType("character varying(11)")
                         .HasMaxLength(11);
 
-                    b.Property<int>("IntId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("timestamp without time zone");
 
@@ -115,14 +102,12 @@ namespace Vaccination.EF.Migrations
 
                     b.Property<string>("Sex")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("character varying(1)")
+                        .HasMaxLength(1);
 
                     b.HasKey("Id");
 
                     b.HasIndex("InsuranceNumber")
-                        .IsUnique();
-
-                    b.HasIndex("IntId")
                         .IsUnique();
 
                     b.ToTable("Patients");
@@ -134,19 +119,11 @@ namespace Vaccination.EF.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("IntId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("IntId")
-                        .IsUnique();
 
                     b.ToTable("Vaccines");
                 });
