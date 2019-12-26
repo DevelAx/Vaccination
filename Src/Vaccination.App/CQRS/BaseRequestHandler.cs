@@ -15,11 +15,13 @@ namespace Vaccination.App.CQRS
 	{
 		protected readonly IVaccinationDbContext _dbContext;
 		protected readonly IMapper _mapper;
+		protected readonly IMediator _mediator;
 
 		public BaseRequestHandler(IServiceProvider services)
 		{
 			_dbContext = services.GetRequiredService<IVaccinationDbContext>();
 			_mapper = services.GetRequiredService<IMapper>();
+			_mediator = services.GetRequiredService<IMediator>();
 		}
 
 		public abstract Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken);

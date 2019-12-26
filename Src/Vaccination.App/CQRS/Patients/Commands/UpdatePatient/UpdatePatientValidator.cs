@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using System;
+using System.Collections.Generic;
 using Vaccination.App.CQRS.Patients.Queries.GetEditPaitient;
 
 namespace Vaccination.App.CQRS.Patients.Commands.UpdatePatient
@@ -11,29 +12,24 @@ namespace Vaccination.App.CQRS.Patients.Commands.UpdatePatient
 
 		public UpdatePatientValidator()
 		{
-			RuleFor(x => x.IntId).Required();
-
-			RuleFor(x => x.BirthDate)
-				.Must(BeActualDate)
-				.WithMessage($"Дата рождения должна быть в диапазоне от {MIN_BIRTH_DATE.ToShortDateString()} до {MAX_BIRTH_DATE.ToShortDateString()}");
-
+			RuleFor(x => x.Id).Required();
+			RuleFor(x => x.BirthDate).DatesRange(MIN_BIRTH_DATE, MAX_BIRTH_DATE);
 			RuleFor(x => x.LastName).Required();
 			RuleFor(x => x.FirstName).Required();
 			RuleFor(x => x.InsuranceNumber).Required().Matches(@"^\d{11}$").WithMessage("СНИЛС должен состоять из 11 цифр");
-			RuleFor(x => x.Sex).Required();
+			RuleForEach(x => x.Inoculations).SetValidator(x=> new UpdateInoculationValidator(x));
 		}
 
-		private bool BeActualDate(DateTime date)
+		private class UpdateInoculationValidator : AbstractValidator<EditInoculationDto>
 		{
-			if (date.Equals(default))
-				return false;
-
-			if (date < MIN_BIRTH_DATE || date > MAX_BIRTH_DATE)
-				return false;
-
-			return true;
+			public UpdateInoculationValidator(EditPatientVM parent)
+			{
+				When(i => !i.IsDeleted, () =>
+				{
+					RuleFor(x => x.VaccineId).Required();
+					RuleFor(x => x.Date).DatesRange(parent.BirthDate, DateTime.Now);
+				});
+			}
 		}
-
-
 	}
 }

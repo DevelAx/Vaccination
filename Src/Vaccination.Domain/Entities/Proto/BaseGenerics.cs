@@ -7,7 +7,6 @@ namespace Vaccination.Domain.Entities.Proto
 		public abstract class Entity
 		{
 			public TId Id { get; set; }
-			public int IntId { get; set; }
 		}
 
 		public abstract class AuditableEntity : Entity

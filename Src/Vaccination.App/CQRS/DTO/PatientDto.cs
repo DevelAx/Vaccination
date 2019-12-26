@@ -8,8 +8,6 @@ namespace Vaccination.App.CQRS.DTO
 {
 	public class PatientDto : BaseMapFrom<Patient>
 	{
-		public int IntId { get; set; }
-
 		[DisplayName("Имя")]
 		public string FirstName { get; set; }
 

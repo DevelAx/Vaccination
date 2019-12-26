@@ -1,0 +1,22 @@
+﻿.hover-hightlight:hover {
+    background-color: #f1fbff;
+}
+
+input[type=checkbox] {
+    width: 30%;
+    display: inline-block;
+}
+
+button.my-delete-btn {
+    padding: 1px 7px;
+    font-weight: bold;
+    font-size: 1.1em;
+
+    span {
+        color: red;
+    }
+}
+
+.invisible {
+    display: none;
+}

@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System;
-using System.Reflection;
 using System.Threading.Tasks;
 using Vaccination.App.CQRS.Patients.Commands.UpdatePatient;
 using Vaccination.App.CQRS.Patients.Queries.FindPatients;
+using Vaccination.App.CQRS.Patients.Queries.GetAllVaccines;
 using Vaccination.App.CQRS.Patients.Queries.GetEditPaitient;
 using Vaccination.App.CQRS.Patients.Queries.GetPatient;
 using WebUI.Controllers.Base;
@@ -22,7 +21,6 @@ namespace WebUI.Controllers
 
         public IActionResult Index()
         {
-            _log.LogDebug(MethodBase.GetCurrentMethod().Name);
             return View();
         }
 
@@ -33,19 +31,17 @@ namespace WebUI.Controllers
             return Json(vm);
         }
 
-        [HttpGet(PatientsRoutes.patient + "/{id:int}")]
-        public async Task<IActionResult> Patient(int id)
+        [HttpGet(PatientsRoutes.patient + "/{id}")]
+        public async Task<IActionResult> Patient(Guid id)
         {
-            _log.LogDebug(MethodBase.GetCurrentMethod().Name);
-            var vm = await Mediator.Send(new GetPaitientQuery(id));
+            var vm = await Mediator.Send(new PaitientQuery(id));
             return View(vm);
         }
 
-        [HttpGet(PatientsRoutes.edit + "/{id:int}")]
-        public async Task<IActionResult> EditPatient(int id)
+        [HttpGet(PatientsRoutes.edit + "/{id}")]
+        public async Task<IActionResult> EditPatient(Guid id)
         {
-            _log.LogDebug(MethodBase.GetCurrentMethod().Name);
-            var vm = await Mediator.Send(new GetEditPaitientQuery(id));
+            var vm = await Mediator.Send(new EditPaitientQuery(id));
             return View(vm);
         }
 
@@ -53,13 +49,14 @@ namespace WebUI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditPatient(EditPatientVM vm)
         {
-            _log.LogDebug(MethodBase.GetCurrentMethod().Name);
-
             if (!ModelState.IsValid)
+            {
+                vm.AllVaccines = await Mediator.Send(new AllVaccinesQuery());
                 return View(vm);
-
+            }
+                
             await Mediator.Send(new UpdatePatientCommand(vm));
-            return Redirect(Url.Action(PatientsRoutes.patient, PatientsRoutes.controller, new { Id = vm.IntId }));
+            return Redirect(Url.Action(PatientsRoutes.patient, PatientsRoutes.controller, new { vm.Id }));
         }
     }
 }

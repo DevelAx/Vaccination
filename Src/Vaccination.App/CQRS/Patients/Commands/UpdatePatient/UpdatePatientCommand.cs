@@ -29,18 +29,17 @@ namespace Vaccination.App.CQRS.Patients.Commands.UpdatePatient
 
 		public override async Task<Unit> Handle(UpdatePatientCommand request, CancellationToken cancellationToken)
 		{
-			var tempPatient = await _dbContext.Patients
-				.Where(p => p.IntId == request.Patient.IntId)
-				.Select(p => new { p.Id })
-				.FirstOrDefaultAsync();
+			var vm = request.Patient;
 
-			if (tempPatient == null)
-				throw new PatientNotFoundException();
+			foreach(var inoculation in vm.Inoculations.Where(i => i.IsDeleted).ToList())
+			{
+				vm.Inoculations.Remove(inoculation);
+				_dbContext.Inoculations.Remove(new Inoculation { Id = inoculation.Id });
+			}
 
-			Patient patient = _mapper.Map<Patient>(request.Patient);
-			patient.Id = tempPatient.Id;
-
-			_dbContext.Patients.Update(patient);
+			Patient patient = new Patient { Id = vm.Id };
+			_dbContext.Patients.Attach(patient);
+			_mapper.Map(request.Patient, patient);
 			await _dbContext.SaveChangesAsync(cancellationToken);
 
 			return Unit.Value;

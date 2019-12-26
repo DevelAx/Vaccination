@@ -1,60 +1,152 @@
-﻿@using Vaccination.App.AuxiliaryTypes
-@model Vaccination.App.CQRS.Patients.Queries.GetEditPaitient.EditPatientVM
+﻿@model Vaccination.App.CQRS.Patients.Queries.GetEditPaitient.EditPatientVM
 
 @{
-    ViewBag.Title = "Редактирование пациента";
+    ViewBag.Title = "Редактирование данных пациента";
+}
+
+@section Styles{
+    <environment include="Development">
+        <link href="~/structured/patients/editPatient.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+    <environment exclude="Development">
+        <link href="~/structured/patients/editPatient.min.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
 }
 
 <h2>@ViewBag.Title</h2>
 
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="@PatientsRoutes.edit" asp-controller="@PatientsRoutes.controller" method="post" asp-antiforgery="true">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="IntId" class="form-control" />
-            <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
+<form asp-action="@PatientsRoutes.edit" asp-controller="@PatientsRoutes.controller" method="post" asp-antiforgery="true">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+    <div class="row">
+        <div class="col-md-4">
+            <h4>Пациент</h4>
+
+            <div class="hover-hightlight border rounded p-3">
+                <div class="form-group">
+                    <label asp-for="LastName" class="control-label"></label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FirstName" class="control-label"></label>
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Patronymic" class="control-label"></label>
+                    <input asp-for="Patronymic" class="form-control" />
+                    <span asp-validation-for="Patronymic" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="BirthDate" class="control-label"></label>
+                    <input asp-for="BirthDate" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" />
+                    <span asp-validation-for="BirthDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Sex" class="control-label"></label>
+                    <select asp-for="Sex" asp-items="Html.GetEnumSelectList(Model.Sex.GetType())" class="form-control">
+                    </select>
+                    <span asp-validation-for="Sex" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="InsuranceNumber" class="control-label"></label>
+                    <input asp-for="InsuranceNumber" class="form-control" />
+                    <span asp-validation-for="InsuranceNumber" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Patronymic" class="control-label"></label>
-                <input asp-for="Patronymic" class="form-control" />
-                <span asp-validation-for="Patronymic" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BirthDate" class="control-label"></label>
-                <input asp-for="BirthDate" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" />
-                <span asp-validation-for="BirthDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Sex" class="control-label"></label>
-                <select asp-for="Sex" asp-items="Html.GetEnumSelectList<Sexes>()" class="form-control">
-                </select>
-                <span asp-validation-for="Sex" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="InsuranceNumber" class="control-label"></label>
-                <input asp-for="InsuranceNumber" class="form-control" />
-                <span asp-validation-for="InsuranceNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
+        </div>
+
+        <div class="col-md-8">
+            <h4>Прививки</h4>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Дата</th>
+                        <th scope="col">Вакцина</th>
+                        <th scope="col">Согласие</th>
+                        <th scope="col">Удалить</th>
+                    </tr>
+                </thead>
+                <tbody id="inoculations-container">
+                    @for (int i = 0; i < Model.Inoculations.Count; i++)
+                    {
+                        <tr class="delete-btn-target hover-hightlight @(Model.Inoculations[i].IsDeleted ? "invisible" : null)">
+                            <td>
+                                <input asp-for="Inoculations[i].Date" class="form-control" type="date" asp-format="{0:yyyy-MM-dd}" />
+                                <span asp-validation-for="Inoculations[i].Date" class="text-danger"></span>
+                            </td>
+                            <td>
+                                <select asp-for="Inoculations[i].VaccineId" asp-items="@(new SelectList(Model.AllVaccines, "Id", "Name"))" class="form-control">
+                                    <option selected="selected" value="@Guid.Empty">-- Не выбрано --</option>
+                                </select>
+                                <span asp-validation-for="Inoculations[i].VaccineId" class="text-danger"></span>
+                            </td>
+                            <td class="text-center">
+                                <input type="checkbox" class="form-control" id="@Html.IdFor(m=>m.Inoculations[i].HasConsent)" name="@Html.NameFor(m=>m.Inoculations[i].HasConsent)" value="true" checked="@Model.Inoculations[i].HasConsent" />
+                            </td>
+                            <td class="text-center">
+                                <input type="hidden" asp-for="Inoculations[i].Id" />
+                                <input type="hidden" asp-for="Inoculations[i].IsDeleted" class="is-deleted" value="@Model.Inoculations[i].IsDeleted" />
+                                <button type="button" class="my-delete-btn" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                    <!--Dynamic template-->
+                    <tr id="inoculation-row-template" class="delete-btn-target hover-hightlight" style="display: none;">
+                        <td>
+                            <input class="form-control" type="date" data-val="true" data-val-required="The Дата постановки field is required." id="Inoculations_[i]__Date" name="Inoculations[[i]].Date">
+                            <span class="text-danger field-validation-valid" data-valmsg-for="Inoculations[[i]].Date" data-valmsg-replace="true"></span>
+                        </td>
+                        <td>
+                            <select class="form-control" data-val="true" data-val-required="The Вакцина field is required." id="Inoculations_[i]__VaccineId" name="Inoculations[[i]].VaccineId">
+                                <option selected="selected" value="@Guid.Empty">-- Не выбрано --</option>
+                                @foreach (var vaccine in Model.AllVaccines)
+                                {
+                                    <option value="@vaccine.Id">@vaccine.Name</option>
+                                }
+                            </select>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="Inoculations[[i]].VaccineId" data-valmsg-replace="true"></span>
+                        </td>
+                        <td class="text-center">
+                            <input type="checkbox" class="form-control" id="Inoculations_[i]__HasConsent" name="Inoculations[[i]].HasConsent" value="true">
+                        </td>
+                        <td class="text-center">
+                            <input type="hidden" class="form-control is-deleted" data-val="true" data-val-required="The IsDeleted field is required." id="Inoculations_[i]__IsDeleted" name="Inoculations[[i]].IsDeleted" value="False">
+                            <button type="button" class="my-delete-btn" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </td>
+                    </tr>
+                    <!--Dynamic template-->
+                </tbody>
+            </table>
+
+            <button id="add-inoculation-btn" type="button" class="add" aria-label="Add">
+                <span aria-hidden="true">+ Новая прививка</span>
+            </button>
+            <div class="form-group mt-5 float-right">
                 <input type="submit" value="Сохранить" class="btn btn-primary" />
             </div>
-        </form>
+        </div>
     </div>
-</div>
+</form>
 
-<div>
-    <a asp-action="Index">Назад к списку</a>
-</div>
+<br />
+<a asp-action="Index">Назад к списку</a>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <environment include="Development">
+        <script src="~/structured/patients/editPatient.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+
+        <script src="~/structured/patients/editPatient.es5.js" asp-append-version="true"></script>
+    </environment>
 }

@@ -77,15 +77,17 @@ namespace Vaccination.App.CQRS.DbSeeding.Commands.SeedSampleData
 
 			Patient NewPatient(string lastName, string firstName, string patronymic, string sex)
 			{
+				var birthDate = randomDate.Next();
+
 				return new Patient
 				{
-					BirthDate = randomDate.Next(),
+					BirthDate = birthDate,
 					LastName = lastName,
 					FirstName = firstName,
 					Patronymic = patronymic,
 					Sex = sex,
 					InsuranceNumber = NewInsuranceNumber(),
-					Inoculations = NewInoculations()
+					Inoculations = NewInoculations(birthDate.Year + 1)
 				};
 			}
 
@@ -94,9 +96,9 @@ namespace Vaccination.App.CQRS.DbSeeding.Commands.SeedSampleData
 				return "12345678" + n++.ToString("000");
 			}
 
-			ICollection<Inoculation> NewInoculations()
+			ICollection<Inoculation> NewInoculations(int minYear)
 			{
-				var randomDate = new RandomDate(2000, DateTime.Now.Year - 1);
+				var randomDate = new RandomDate(minYear, DateTime.Now.Year - 1);
 				int n = rnd.Next(0, _vaccines.Length);
 				var inoculations = new List<Inoculation>(n);
 

@@ -13,13 +13,6 @@ namespace Vaccination.EF.Configurations
 		public virtual void Configure(EntityTypeBuilder<TEntity> builder)
 		{
 			SetTablesPluralNames(builder);
-			SetIndId(builder);
-		}
-
-		private void SetIndId(EntityTypeBuilder<TEntity> builder)
-		{
-			builder.Property(p => p.IntId).ValueGeneratedOnAdd();
-			builder.HasIndex(p => p.IntId).IsUnique();
 		}
 
 		private void SetTablesPluralNames(EntityTypeBuilder<TEntity> builder)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using Vaccination.App.Mapping;
 using Vaccination.Domain.Entities;
 

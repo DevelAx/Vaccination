@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 using Vaccination.App.AuxiliaryTypes;
 using Vaccination.App.Mapping;
 using Vaccination.Domain.Entities;
@@ -13,8 +12,6 @@ namespace Vaccination.App.CQRS.Patients.Queries.GetEditPaitient
 {
 	public class EditPatientVM : BaseMapFrom<Patient>
 	{
-		public int IntId { get; set; }
-
 		[DisplayName("Имя")]
 		public string FirstName { get; set; }
 
@@ -32,6 +29,12 @@ namespace Vaccination.App.CQRS.Patients.Queries.GetEditPaitient
 
 		[DisplayName("СНИЛС")]
 		public string InsuranceNumber { get; set; }
+
+		public IList<EditInoculationDto> Inoculations { get; set; }
+
+		public Vaccine[] AllVaccines { get; set; }
+
+		#region Mapping
 
 		public override void Mapping(Profile profile)
 		{
@@ -63,5 +66,7 @@ namespace Vaccination.App.CQRS.Patients.Queries.GetEditPaitient
 			string sexName = FindAttribute<DisplayAttribute>.InEnum(sex).Name;
 			return sexName;
 		}
+
+		#endregion
 	}
 }
