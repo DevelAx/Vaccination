@@ -29,30 +29,5 @@ namespace Vaccination.Controllers
 			_log.LogDebug(MethodBase.GetCurrentMethod().Name);
 			return View();
 		}
-
-		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-		[AllowAnonymous]
-		public IActionResult Error()
-		{
-			string userMessage = "системная ошибка, попробуйте открыть другую страницу";
-			var excHandler = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
-
-			if (excHandler != null)
-			{
-				if (excHandler.Error is VaccinationAppException error)
-				{
-					userMessage = error.Message;
-				}
-
-				_log.LogError(excHandler.Error, excHandler.Path);
-			}
-
-			var vm = new ErrorViewModel(userMessage)
-			{
-				RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
-			};
-
-			return View(vm);
-		}
 	}
 }

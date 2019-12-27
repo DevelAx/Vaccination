@@ -1,4 +1,6 @@
-﻿(function () {
+﻿"use strict";
+
+(function () {
     activateSearch();
 
     function activateSearch() {

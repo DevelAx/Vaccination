@@ -1,0 +1,12 @@
+﻿@model int
+@{
+    int statusCode = Model;
+    ViewBag.Title = "Страница недоступна, код ошибки: " + statusCode;
+}
+
+<h1 class="text-danger">Страница недоступна</h1>
+<h2 class="text-danger">Код ошибки: @statusCode</h2>
+
+<p>
+    Попробуйте перейти на другую страницу
+</p>
