@@ -50,7 +50,7 @@
             };
 
             $.get(getPatientsUrl, urlParams).done(function (data) {
-                if (data.searchId !== searchId - 1) return;
+                if (data.searchId !== searchId - 1) return; // This request is not actual anymore.
 
                 stopSearchProgress(data.totalPatientsCount, data.patients.length);
                 page = data.pageNumber + 1;

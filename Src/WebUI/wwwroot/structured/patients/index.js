@@ -48,7 +48,7 @@
             $.get(getPatientsUrl, urlParams)
                 .done(data => {
                     if (data.searchId !== searchId - 1)
-                        return;
+                        return; // This request is not actual anymore.
 
                     stopSearchProgress(data.totalPatientsCount, data.patients.length);
                     page = data.pageNumber + 1;
