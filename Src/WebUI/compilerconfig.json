@@ -8,10 +8,6 @@
     "inputFile": "wwwroot/structured/patients/index.js"
   },
   {
-    "outputFile": "wwwroot/lib/miranda/jquery.miranda.es5.js",
-    "inputFile": "wwwroot/lib/miranda/jquery.miranda.js"
-  },
-  {
     "outputFile": "wwwroot/js/site.es5.js",
     "inputFile": "wwwroot/js/site.js"
   },
