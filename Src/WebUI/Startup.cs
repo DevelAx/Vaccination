@@ -1,4 +1,3 @@
-using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,7 +8,6 @@ using Microsoft.Extensions.Logging;
 using System.Globalization;
 using Vaccination.App;
 using Vaccination.App.CQRS.Patients.Commands.UpdatePatient;
-using Vaccination.App.CQRS.Patients.Queries.GetEditPaitient;
 using Vaccination.EF;
 using Vaccination.Infastructure;
 using WebUI.Inner.Filters;
@@ -53,9 +51,9 @@ namespace Vaccination
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
 		{
-			var cultureInfo = new CultureInfo("ru-RU");
-			CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
-			CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+			SetCultures("ru-RU");
+			
+			app.ConfigureEntityFramework(env.IsDevelopment());
 
 			if (env.IsDevelopment())
 			{
@@ -83,6 +81,13 @@ namespace Vaccination
 					name: "default",
 					pattern: "{controller=Home}/{action=Index}/{id?}");
 			});
+		}
+
+		private void SetCultures(string cult)
+		{
+			var cultureInfo = new CultureInfo(cult);
+			CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+			CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 		}
 	}
 }

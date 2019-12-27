@@ -12,8 +12,6 @@ namespace Vaccination.EF
 {
 	public static class DependencyInjection
 	{
-		
-
 		public static IServiceCollection AddEntityFramework(this IServiceCollection services, IConfiguration configuration)
 		{
 			string connectionString = configuration.GetConnectionString("DefaultConnection");
