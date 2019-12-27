@@ -59,7 +59,7 @@ $.fn.mirandajs = function (data, options) {
     function mirandaReplace(obj) {
         var HTML_TEMP = HTML_BASE;
         keys = $.map(obj, function (v, i) {
-            HTML_TEMP = HTML_TEMP.split('[[' + i + ']]').join(v);
+            HTML_TEMP = HTML_TEMP.split('[[' + i + ']]').join(v ? v : '');
         });
         return HTML_TEMP;
     }
