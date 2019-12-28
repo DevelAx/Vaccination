@@ -10,23 +10,24 @@ using Vaccination.Domain.Entities;
 
 namespace Vaccination.App.CQRS.Patients.Queries.GetAllVaccines
 {
-	public class AllVaccinesQuery : IRequest<Vaccine[]>
+	public class AllVaccinesQuery : IRequestResult<Vaccine[]>
 	{
 	}
 
-	public class AllVaccinesQueryHandler : BaseRequestHandler<AllVaccinesQuery, Vaccine[]>
+	public class AllVaccinesQueryHandler : RequestHandler<AllVaccinesQuery, Vaccine[]>
 	{
 		public AllVaccinesQueryHandler(IServiceProvider services)
 			: base(services)
 		{
 		}
 
-		public override async Task<Vaccine[]> Handle(AllVaccinesQuery request, CancellationToken cancellationToken)
+		public override async Task<RequestResult<Vaccine[]>> Handle(AllVaccinesQuery request, CancellationToken cancellationToken)
 		{
 			var allVaccines = await _dbContext.Vaccines
 				.OrderBy(v => v.Name)
 				.ToArrayAsync(cancellationToken);
-			return allVaccines;
+
+			return Result(allVaccines);
 		}
 	}
 }

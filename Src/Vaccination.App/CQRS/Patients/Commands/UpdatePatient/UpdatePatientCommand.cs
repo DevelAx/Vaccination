@@ -10,7 +10,7 @@ using Vaccination.Domain.Entities;
 
 namespace Vaccination.App.CQRS.Patients.Commands.UpdatePatient
 {
-	public class UpdatePatientCommand : IRequest
+	public class UpdatePatientCommand : IRequestResult
 	{
 		public EditPatientVM Patient { get; }
 
@@ -20,14 +20,14 @@ namespace Vaccination.App.CQRS.Patients.Commands.UpdatePatient
 		}
 	}
 
-	public class UpdatePaitientCommandHandler : BaseRequestHandler<UpdatePatientCommand>
+	public class UpdatePaitientCommandHandler : RequestHandler<UpdatePatientCommand>
 	{
 		public UpdatePaitientCommandHandler(IServiceProvider services) 
 			: base(services)
 		{
 		}
 
-		public override async Task<Unit> Handle(UpdatePatientCommand request, CancellationToken cancellationToken)
+		public override async Task<RequestResult> Handle(UpdatePatientCommand request, CancellationToken cancellationToken)
 		{
 			var vm = request.Patient;
 
@@ -44,7 +44,7 @@ namespace Vaccination.App.CQRS.Patients.Commands.UpdatePatient
 			_mapper.Map(request.Patient, patient);
 			await _dbContext.SaveChangesAsync(cancellationToken);
 
-			return Unit.Value;
+			return Result;
 		}
 	}
 }

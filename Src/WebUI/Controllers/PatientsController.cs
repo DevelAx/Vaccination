@@ -27,22 +27,22 @@ namespace WebUI.Controllers
         [HttpGet(PatientsRoutes.search)]
         public async Task<IActionResult> PatientsList(string fullName, string insuranceNumber, int searchId, int page = 1)
         {
-            var vm = await Mediator.Send(new FindPatientsQuery(fullName, insuranceNumber, searchId, page));
-            return Json(vm);
+            var result = await Mediator.Send(new FindPatientsQuery(fullName, insuranceNumber, searchId, page));
+            return Json(result.Data);
         }
 
         [HttpGet(PatientsRoutes.patient + "/{id}")]
         public async Task<IActionResult> Patient(Guid id)
         {
-            var vm = await Mediator.Send(new PaitientQuery(id));
-            return View(vm);
+            var result = await Mediator.Send(new PaitientQuery(id));
+            return View(result.Data);
         }
 
         [HttpGet(PatientsRoutes.edit + "/{id}")]
         public async Task<IActionResult> EditPatient(Guid id)
         {
-            var vm = await Mediator.Send(new EditPaitientQuery(id));
-            return View(vm);
+            var result = await Mediator.Send(new EditPaitientQuery(id));
+            return View(result.Data);
         }
 
         [HttpPost(PatientsRoutes.edit)]
@@ -51,7 +51,12 @@ namespace WebUI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                vm.AllVaccines = await Mediator.Send(new AllVaccinesQuery());
+                var result = await Mediator.Send(new AllVaccinesQuery());
+
+                //if (result.HasError)
+                //    return MyView(result);
+
+                vm.AllVaccines = result.Data;
                 return View(vm);
             }
                 

@@ -2,14 +2,36 @@
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Vaccination.Infastructure.Errors;
 using Vaccination.Interfaces;
 
 namespace Vaccination.App.CQRS
 {
+	public abstract class RequestHandler<TRequest, TData> : BaseRequestHandler<TRequest, RequestResult<TData>>
+		where TRequest : IRequest<RequestResult<TData>>
+	{
+		public RequestHandler(IServiceProvider services)
+			: base(services)
+		{ }
+
+		protected RequestResult<TData> Result(TData result) => new RequestResult<TData>(result);
+		protected RequestResult<TData> Error(VaccinationAppException error) => new RequestResult<TData>(error);
+	}
+
+	public abstract class RequestHandler<TRequest> : BaseRequestHandler<TRequest, RequestResult>
+		where TRequest : IRequest<RequestResult>
+	{
+		public RequestHandler(IServiceProvider services)
+			: base(services)
+		{ }
+
+		protected RequestResult Result => RequestResult.Empty;
+	}
+
+	#region BaseRequestHandler
+
 	public abstract class BaseRequestHandler<TRequest, TResponse> : IRequestHandler<TRequest, TResponse>
 		where TRequest : IRequest<TResponse>
 	{
@@ -30,9 +52,14 @@ namespace Vaccination.App.CQRS
 	public abstract class BaseRequestHandler<TRequest> : BaseRequestHandler<TRequest, Unit>
 		where TRequest : IRequest<Unit>
 	{
-		public BaseRequestHandler(IServiceProvider services) 
+		public BaseRequestHandler(IServiceProvider services)
 			: base(services)
 		{
 		}
 	}
+
+	#endregion BaseRequestHandler
+
+	public interface IRequestResult : IRequest<RequestResult> { }
+	public interface IRequestResult<TData> : IRequest<RequestResult<TData>> { }
 }

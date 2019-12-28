@@ -7,11 +7,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Vaccination.App.CQRS.Exceptions;
 using Vaccination.App.CQRS.Patients.Queries.GetAllVaccines;
-using Vaccination.Domain.Entities;
 
 namespace Vaccination.App.CQRS.Patients.Queries.GetEditPaitient
 {
-	public class EditPaitientQuery : IRequest<EditPatientVM>
+	public class EditPaitientQuery : IRequestResult<EditPatientVM>
 	{
 		public Guid PatientId { get; }
 
@@ -21,25 +20,30 @@ namespace Vaccination.App.CQRS.Patients.Queries.GetEditPaitient
 		}
 	}
 
-	public class EditPaitientQueryHandler : BaseRequestHandler<EditPaitientQuery, EditPatientVM>
+	public class EditPaitientQueryHandler : RequestHandler<EditPaitientQuery, EditPatientVM>
 	{
 		public EditPaitientQueryHandler(IServiceProvider services) 
 			: base(services)
 		{
 		}
 
-		public override async Task<EditPatientVM> Handle(EditPaitientQuery request, CancellationToken cancellationToken)
+		public override async Task<RequestResult<EditPatientVM>> Handle(EditPaitientQuery request, CancellationToken cancellationToken)
 		{
 			var vm = await _dbContext.Patients
 				.ProjectTo<EditPatientVM>(_mapper.ConfigurationProvider)
 				.FirstOrDefaultAsync(p => p.Id == request.PatientId, cancellationToken);
 
 			if (vm == null)
-				throw new PatientNotFoundException(); // TODO: change to error result programm flow
+				return Error(new PatientNotFoundException());
 
 			vm.Inoculations = vm.Inoculations.OrderBy(i => i.Date).ToList();
-			vm.AllVaccines = await _mediator.Send(new AllVaccinesQuery());
-			return vm;
+			var allVaccinesResult = await _mediator.Send(new AllVaccinesQuery());
+
+			if (allVaccinesResult.HasError)
+				return Error(allVaccinesResult.Error);
+
+			vm.AllVaccines = allVaccinesResult.Data;
+			return Result(vm);
 		}
 	}
 }

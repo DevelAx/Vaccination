@@ -1,5 +1,4 @@
 ﻿using AutoMapper.QueryableExtensions;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System;
@@ -13,7 +12,7 @@ using Vaccination.Infastructure.Config.Sections;
 
 namespace Vaccination.App.CQRS.Patients.Queries.FindPatients
 {
-	public class FindPatientsQuery : IRequest<PatientsListVM>
+	public class FindPatientsQuery : IRequestResult<PatientsListVM>
 	{
 		public string FullName { get; }
 		public string InsuranceNumber { get; }
@@ -29,7 +28,7 @@ namespace Vaccination.App.CQRS.Patients.Queries.FindPatients
 		}
 	}
 
-	public class FindPatientsQueryHandler : BaseRequestHandler<FindPatientsQuery, PatientsListVM>
+	public class FindPatientsQueryHandler : RequestHandler<FindPatientsQuery, PatientsListVM>
 	{
 		public int ItemsPerPage { get; }
 
@@ -39,7 +38,7 @@ namespace Vaccination.App.CQRS.Patients.Queries.FindPatients
 			ItemsPerPage = settings.Value.ItemsPerPage;
 		}
 
-		public override async Task<PatientsListVM> Handle(FindPatientsQuery request, CancellationToken cancellationToken)
+		public override async Task<RequestResult<PatientsListVM>> Handle(FindPatientsQuery request, CancellationToken cancellationToken)
 		{
 			int skip = ItemsPerPage * request.Page;
 			int take = ItemsPerPage;
@@ -145,8 +144,10 @@ namespace Vaccination.App.CQRS.Patients.Queries.FindPatients
 				Pages = pages
 			};
 
-			return vm;
+			return Result(vm);
 		}
+
+		#region Helpers
 
 		private string HightlightIfStartsWith(string normalizedName, string name, string token)
 		{
@@ -172,5 +173,7 @@ namespace Vaccination.App.CQRS.Patients.Queries.FindPatients
 			builder.Append("<u>").Append(p1).Append("</u>").Append(p2);
 			return builder.ToString();
 		}
+
+		#endregion Helpers
 	}
 }
