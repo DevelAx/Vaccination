@@ -20,7 +20,7 @@ namespace Vaccination.App.CQRS.Patients.Queries.GetEditPaitient
 		}
 	}
 
-	public class EditPaitientQueryHandler : RequestHandler<EditPaitientQuery, EditPatientVM>
+	public class EditPaitientQueryHandler : RequestResultHandler<EditPaitientQuery, EditPatientVM>
 	{
 		public EditPaitientQueryHandler(IServiceProvider services) 
 			: base(services)
@@ -37,12 +37,7 @@ namespace Vaccination.App.CQRS.Patients.Queries.GetEditPaitient
 				return Error(new PatientNotFoundException());
 
 			vm.Inoculations = vm.Inoculations.OrderBy(i => i.Date).ToList();
-			var allVaccinesResult = await _mediator.Send(new AllVaccinesQuery());
-
-			if (allVaccinesResult.HasError)
-				return Error(allVaccinesResult.Error);
-
-			vm.AllVaccines = allVaccinesResult.Data;
+			vm.AllVaccines = await _mediator.Send(new AllVaccinesQuery());
 			return Result(vm);
 		}
 	}

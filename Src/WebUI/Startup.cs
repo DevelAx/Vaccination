@@ -52,8 +52,6 @@ namespace Vaccination
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
 		{
 			SetCultures("ru-RU");
-			
-			app.ConfigureEntityFramework(env.IsDevelopment());
 
 			if (env.IsDevelopment())
 			{
@@ -65,6 +63,8 @@ namespace Vaccination
 				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 				app.UseHsts();
 			}
+
+			app.ConfigureEntityFramework(env.IsDevelopment());
 
 			app.UseStatusCodePagesWithReExecute("/Errors/PageNotFound/{0}");
 

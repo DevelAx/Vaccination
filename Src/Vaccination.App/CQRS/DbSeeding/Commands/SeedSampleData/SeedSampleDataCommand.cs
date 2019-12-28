@@ -9,7 +9,7 @@ namespace Vaccination.App.CQRS.DbSeeding.Commands.SeedSampleData
 	{
 	}
 
-	public class SeedSampleDataCommandHandler : BaseRequestHandler<SeedSampleDataCommand>
+	public class SeedSampleDataCommandHandler : RequestHandler<SeedSampleDataCommand>
 	{
 		public SeedSampleDataCommandHandler(IServiceProvider services) 
 			: base(services)

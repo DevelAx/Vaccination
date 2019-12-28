@@ -1,4 +1,5 @@
 ﻿using AutoMapper.QueryableExtensions;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System;
@@ -12,7 +13,7 @@ using Vaccination.Infastructure.Config.Sections;
 
 namespace Vaccination.App.CQRS.Patients.Queries.FindPatients
 {
-	public class FindPatientsQuery : IRequestResult<PatientsListVM>
+	public class FindPatientsQuery : IRequest<PatientsListVM>
 	{
 		public string FullName { get; }
 		public string InsuranceNumber { get; }
@@ -38,7 +39,7 @@ namespace Vaccination.App.CQRS.Patients.Queries.FindPatients
 			ItemsPerPage = settings.Value.ItemsPerPage;
 		}
 
-		public override async Task<RequestResult<PatientsListVM>> Handle(FindPatientsQuery request, CancellationToken cancellationToken)
+		public override async Task<PatientsListVM> Handle(FindPatientsQuery request, CancellationToken cancellationToken)
 		{
 			int skip = ItemsPerPage * request.Page;
 			int take = ItemsPerPage;
@@ -144,7 +145,7 @@ namespace Vaccination.App.CQRS.Patients.Queries.FindPatients
 				Pages = pages
 			};
 
-			return Result(vm);
+			return vm;
 		}
 
 		#region Helpers

@@ -8,7 +8,10 @@ namespace Vaccination.Models
 
 		public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 
-		public string Message { get; }
+		public string Message { get; set; }
+
+		public ErrorViewModel()
+		{ }
 
 		public ErrorViewModel(string message)
 		{

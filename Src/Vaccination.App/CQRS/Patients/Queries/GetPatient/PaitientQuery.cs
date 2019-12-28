@@ -18,7 +18,7 @@ namespace Vaccination.App.CQRS.Patients.Queries.GetPatient
 		}
 	}
 
-	public class PaitientQueryHandler : RequestHandler<PaitientQuery, PatientVM>
+	public class PaitientQueryHandler : RequestResultHandler<PaitientQuery, PatientVM>
 	{
 		public PaitientQueryHandler(IServiceProvider services)
 			: base(services)

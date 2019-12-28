@@ -27,14 +27,18 @@ namespace WebUI.Controllers
         [HttpGet(PatientsRoutes.search)]
         public async Task<IActionResult> PatientsList(string fullName, string insuranceNumber, int searchId, int page = 1)
         {
-            var result = await Mediator.Send(new FindPatientsQuery(fullName, insuranceNumber, searchId, page));
-            return Json(result.Data);
+            var vm = await Mediator.Send(new FindPatientsQuery(fullName, insuranceNumber, searchId, page));
+            return Json(vm);
         }
 
         [HttpGet(PatientsRoutes.patient + "/{id}")]
         public async Task<IActionResult> Patient(Guid id)
         {
             var result = await Mediator.Send(new PaitientQuery(id));
+
+            if (result.HasError)
+                return Error(result.Error);
+
             return View(result.Data);
         }
 
@@ -42,6 +46,10 @@ namespace WebUI.Controllers
         public async Task<IActionResult> EditPatient(Guid id)
         {
             var result = await Mediator.Send(new EditPaitientQuery(id));
+
+            if (result.HasError)
+                return Error(result.Error);
+
             return View(result.Data);
         }
 
@@ -51,16 +59,17 @@ namespace WebUI.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var result = await Mediator.Send(new AllVaccinesQuery());
-
-                //if (result.HasError)
-                //    return MyView(result);
-
-                vm.AllVaccines = result.Data;
+                vm.AllVaccines = await Mediator.Send(new AllVaccinesQuery());
                 return View(vm);
             }
                 
-            await Mediator.Send(new UpdatePatientCommand(vm));
+            var result = await Mediator.Send(new UpdatePatientCommand(vm));
+
+            if (result.HasError)
+                TempData["error-info"] = result.Error.Message;
+            else
+                TempData["success-info"] = "Данные сохранены";
+
             return Redirect(Url.Action(PatientsRoutes.patient, PatientsRoutes.controller, new { vm.Id }));
         }
     }

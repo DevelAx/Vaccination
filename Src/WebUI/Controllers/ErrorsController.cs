@@ -22,7 +22,7 @@ namespace WebUI.Controllers
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 		public IActionResult Error()
 		{
-			string userMessage = "системная ошибка, попробуйте открыть другую страницу";
+			string userMessage = string.Empty;
 			var excHandler = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
 
 			if (excHandler != null)

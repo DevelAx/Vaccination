@@ -1,0 +1,16 @@
+﻿@{
+    string errorInfo = TempData["error-info"] as string;
+    string successInfo = TempData["success-info"] as string;
+    string info = errorInfo ?? successInfo;
+}
+
+@if (info != null)
+{
+    string infoClass = (errorInfo != null) ? "danger" : "success";
+    <div class="alert alert-@infoClass alert-dismissible fade show" role="alert">
+        <span>@info</span>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}

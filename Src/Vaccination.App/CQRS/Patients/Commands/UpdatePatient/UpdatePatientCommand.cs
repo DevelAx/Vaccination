@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading;
@@ -20,12 +21,11 @@ namespace Vaccination.App.CQRS.Patients.Commands.UpdatePatient
 		}
 	}
 
-	public class UpdatePaitientCommandHandler : RequestHandler<UpdatePatientCommand>
+	public class UpdatePaitientCommandHandler : RequestResultHandler<UpdatePatientCommand>
 	{
 		public UpdatePaitientCommandHandler(IServiceProvider services) 
 			: base(services)
-		{
-		}
+		{ }
 
 		public override async Task<RequestResult> Handle(UpdatePatientCommand request, CancellationToken cancellationToken)
 		{
@@ -42,7 +42,15 @@ namespace Vaccination.App.CQRS.Patients.Commands.UpdatePatient
 			Patient patient = new Patient { Id = vm.Id };
 			_dbContext.Patients.Attach(patient).Property(m=>m.Patronymic).IsModified = true;
 			_mapper.Map(request.Patient, patient);
-			await _dbContext.SaveChangesAsync(cancellationToken);
+
+			try
+			{
+				await _dbContext.SaveChangesAsync(cancellationToken);
+			}
+			catch(Exception exc)
+			{
+				return Error("Сохранение данных пациента завершилось ошибкой.");
+			}
 
 			return Result;
 		}
