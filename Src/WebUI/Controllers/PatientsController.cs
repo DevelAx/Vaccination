@@ -35,22 +35,14 @@ namespace WebUI.Controllers
         public async Task<IActionResult> Patient(Guid id)
         {
             var result = await Mediator.Send(new PaitientQuery(id));
-
-            if (result.HasError)
-                return Error(result.Error);
-
-            return View(result.Data);
+            return View(result);
         }
 
         [HttpGet(PatientsRoutes.edit + "/{id}")]
         public async Task<IActionResult> EditPatient(Guid id)
         {
             var result = await Mediator.Send(new EditPaitientQuery(id));
-
-            if (result.HasError)
-                return Error(result.Error);
-
-            return View(result.Data);
+            return View(result);
         }
 
         [HttpPost(PatientsRoutes.edit)]

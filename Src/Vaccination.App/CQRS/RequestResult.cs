@@ -5,7 +5,10 @@ namespace Vaccination.App.CQRS
 	public class RequestResult
 	{
 		public static RequestResult Empty { get; } = new RequestResult();
+		
 		public VaccinationAppException Error { get; }
+		
+		public virtual object Data { get; }
 
 		public bool HasError => Error != null;
 
@@ -15,15 +18,18 @@ namespace Vaccination.App.CQRS
 		{
 			Error = error;
 		}
+
+		public RequestResult(object data)
+		{
+			Data = data;
+		}
 	}
 
 	public class RequestResult<TData> : RequestResult
 	{
-		public TData Data { get; }
-
 		public RequestResult(TData data)
+			:base(data)
 		{
-			Data = data;
 		}
 
 		public RequestResult(VaccinationAppException error)

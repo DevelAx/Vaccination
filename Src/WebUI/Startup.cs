@@ -1,8 +1,11 @@
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Globalization;
@@ -11,6 +14,7 @@ using Vaccination.App.CQRS.Patients.Commands.UpdatePatient;
 using Vaccination.EF;
 using Vaccination.Infastructure;
 using WebUI.Inner.Filters;
+using WebUI.Inner.ViewResults;
 
 namespace Vaccination
 {
@@ -29,6 +33,8 @@ namespace Vaccination
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.TryAddSingleton<IActionResultExecutor<ViewResult>, MyViewResultExecutor>();
+
 			services
 				.AddInfastructure(Configuration)
 				.AddEntityFramework(Configuration)
@@ -40,7 +46,6 @@ namespace Vaccination
 			});
 
 			mvcBuilder.AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<UpdatePatientValidator>());
-			//services.AddTransient<IValidator<EditPatientVM>, UpdatePatientValidator>();
 
 			if (_hostEnvironment.IsDevelopment())
 			{
