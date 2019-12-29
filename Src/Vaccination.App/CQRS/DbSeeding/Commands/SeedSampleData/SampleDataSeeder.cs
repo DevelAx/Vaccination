@@ -93,7 +93,9 @@ namespace Vaccination.App.CQRS.DbSeeding.Commands.SeedSampleData
 
 			string NewInsuranceNumber()
 			{
-				return "12345678" + n++.ToString("000");
+				string insNum = (InsuranceNumber.MinNumber + n++).ToString("000000000");
+				string checkNum = InsuranceNumber.GetChecksum(insNum).ToString("00");
+				return $"{insNum}{checkNum}";
 			}
 
 			ICollection<Inoculation> NewInoculations(int minYear)
