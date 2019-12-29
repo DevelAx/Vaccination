@@ -6,5 +6,6 @@
 		public const string patient = "пациент";
 		public const string search = "поиск";
 		public const string edit = "редактирование";
+		public const string create = "добавление";
 	}
 }

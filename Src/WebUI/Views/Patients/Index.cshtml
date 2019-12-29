@@ -33,7 +33,7 @@
             </tr>
         </thead>
         <tbody id="patients-list">
-            <tr class='clickable-row' data-href='@Url.Action("пациент", "пациенты")/[[id]]' style="display: none;">
+            <tr class='clickable-row' data-href='@Url.Action(@PatientsRoutes.patient, @PatientsRoutes.controller)/[[id]]' style="display: none;">
                 <td scope="row">[[lastName]]</td>
                 <td>[[firstName]]</td>
                 <td>[[patronymic]]</td>

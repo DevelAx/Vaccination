@@ -3,10 +3,12 @@ using System;
 
 namespace Vaccination.App
 {
-	public static class FluidValidationExtensions
+	public static class FluidValidation
 	{
+		public const string RequiredMessage = "Поле обязательно к заполнению";
+
 		public static IRuleBuilderOptions<T, TProperty> Required<T, TProperty>
-			(this IRuleBuilder<T, TProperty> ruleBuilder, string message = "Поле обязательно к заполнению")
+			(this IRuleBuilder<T, TProperty> ruleBuilder, string message = RequiredMessage)
 		{
 			return ruleBuilder.NotEmpty().WithMessage(message);
 		}

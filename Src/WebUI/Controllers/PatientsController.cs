@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using Vaccination.App.CQRS;
+using Vaccination.App.CQRS.Patients.Commands.CreatePatient;
 using Vaccination.App.CQRS.Patients.Commands.UpdatePatient;
 using Vaccination.App.CQRS.Patients.Queries.FindPatients;
 using Vaccination.App.CQRS.Patients.Queries.GetAllVaccines;
@@ -38,6 +40,38 @@ namespace WebUI.Controllers
             return View(result);
         }
 
+		#region Create patient
+
+		[HttpGet(PatientsRoutes.create)]
+        public IActionResult CreatePatient()
+        {
+            //var vm = new CreatePatientVM
+            //{
+
+            //};
+            return View();
+        }
+
+        [HttpPost(PatientsRoutes.create)]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreatePatient(CreatePatientVM vm)
+        {
+            if (!ModelState.IsValid)
+                return View(vm);
+
+            var result = await Mediator.Send(new CreatePatientCommand(vm));
+            ProcessResultBeforeRedirect(result);
+
+            if (result.HasError)
+                return View(vm);
+
+            vm = result.TypedData;
+            return Redirect(Url.Action(PatientsRoutes.patient, PatientsRoutes.controller, new { vm.Id }));
+        }
+
+        #endregion Create patient
+        #region Edit patient
+
         [HttpGet(PatientsRoutes.edit + "/{id}")]
         public async Task<IActionResult> EditPatient(Guid id)
         {
@@ -56,13 +90,21 @@ namespace WebUI.Controllers
             }
                 
             var result = await Mediator.Send(new UpdatePatientCommand(vm));
+            ProcessResultBeforeRedirect(result);
+            return Redirect(Url.Action(PatientsRoutes.patient, PatientsRoutes.controller, new { vm.Id }));
+        }
 
+		#endregion Edit patient
+		#region Helpers
+
+		private void ProcessResultBeforeRedirect(RequestResult result)
+        {
             if (result.HasError)
                 TempData["error-info"] = result.Error.Message;
             else
                 TempData["success-info"] = "Данные сохранены";
-
-            return Redirect(Url.Action(PatientsRoutes.patient, PatientsRoutes.controller, new { vm.Id }));
         }
-    }
+
+		#endregion Helpers
+	}
 }

@@ -18,8 +18,13 @@ namespace Vaccination.App.CQRS
 		{ }
 
 		protected RequestResult<TData> Result(TData result) => new RequestResult<TData>(result);
+
 		protected RequestResult<TData> Error(VaccinationAppException error) => new RequestResult<TData>(error);
-		protected RequestResult<TData> Error(string error) => new RequestResult<TData>(new VaccinationAppException(error));
+
+		protected RequestResult<TData> Error(string error, Exception innerException = null)
+		{
+			return new RequestResult<TData>(new VaccinationAppException(error, innerException));
+		}
 	}
 
 	public abstract class RequestResultHandler<TRequest> : RequestHandler<TRequest, RequestResult>
@@ -30,8 +35,13 @@ namespace Vaccination.App.CQRS
 		{ }
 
 		protected RequestResult Result => RequestResult.Empty;
+		
 		protected RequestResult Error(VaccinationAppException error) => new RequestResult(error);
-		protected RequestResult Error(string error) => new RequestResult(new VaccinationAppException(error));
+		
+		protected RequestResult Error(string error, Exception innerException = null)
+		{
+			return new RequestResult(new VaccinationAppException(error, innerException));
+		}
 	}
 
 	#region BaseRequestHandler

@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Diagnostics;
@@ -14,9 +16,12 @@ namespace WebUI.Inner.ViewResults
 {
 	public class MyViewResultExecutor : ViewResultExecutor
 	{
-		public MyViewResultExecutor(IOptions<MvcViewOptions> viewOptions, IHttpResponseStreamWriterFactory writerFactory, ICompositeViewEngine viewEngine, ITempDataDictionaryFactory tempDataFactory, DiagnosticListener diagnosticListener, ILoggerFactory loggerFactory, IModelMetadataProvider modelMetadataProvider) 
+		private readonly IWebHostEnvironment _env;
+
+		public MyViewResultExecutor(IOptions<MvcViewOptions> viewOptions, IHttpResponseStreamWriterFactory writerFactory, ICompositeViewEngine viewEngine, ITempDataDictionaryFactory tempDataFactory, DiagnosticListener diagnosticListener, ILoggerFactory loggerFactory, IModelMetadataProvider modelMetadataProvider, IWebHostEnvironment env)
 			: base(viewOptions, writerFactory, viewEngine, tempDataFactory, diagnosticListener, loggerFactory, modelMetadataProvider)
 		{
+			_env = env;
 		}
 
 		public override ViewEngineResult FindView(ActionContext actionContext, ViewResult viewResult)
@@ -30,10 +35,15 @@ namespace WebUI.Inner.ViewResults
 						RequestId = Activity.Current?.Id ?? actionContext.HttpContext.TraceIdentifier
 					};
 
-					if (myResult.Error is VaccinationAppException appError)
+					if (_env.IsDevelopment())
+					{
+						errorModel.DevelopmentInfo = myResult.Error.ToString();
+					}
+					else if (myResult.Error is VaccinationAppException appError)
 					{
 						errorModel.Message = appError.Message;
 					}
+
 
 					viewResult.ViewData.Model = errorModel;
 					viewResult.ViewName = "Error";

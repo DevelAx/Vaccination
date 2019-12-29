@@ -27,9 +27,14 @@ namespace Vaccination.App.CQRS
 
 	public class RequestResult<TData> : RequestResult
 	{
+		public TData TypedData { get; }
+
+		public override object Data => TypedData;
+
 		public RequestResult(TData data)
 			:base(data)
 		{
+			TypedData = data;
 		}
 
 		public RequestResult(VaccinationAppException error)

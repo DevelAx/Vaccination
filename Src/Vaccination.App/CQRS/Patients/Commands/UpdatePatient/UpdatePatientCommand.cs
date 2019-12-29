@@ -49,7 +49,8 @@ namespace Vaccination.App.CQRS.Patients.Commands.UpdatePatient
 			}
 			catch(Exception exc)
 			{
-				return Error("Сохранение данных пациента завершилось ошибкой.");
+				string message = "Сохранение данных пациента завершилось ошибкой.";
+				return Error(message, exc);
 			}
 
 			return Result;
