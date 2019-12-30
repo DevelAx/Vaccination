@@ -7,7 +7,7 @@ namespace Vaccination.App.CQRS.Patients.Queries.GetEditPaitient
 {
 	public class EditPatientVM : BasePatientEditVM
 	{
-		public IList<EditInoculationDto> Inoculations { get; set; }
+		public IList<EditInoculationDto> Inoculations { get; set; } = new List<EditInoculationDto>();
 
 		public override void Mapping(Profile profile)
 		{
